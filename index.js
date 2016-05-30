@@ -3,7 +3,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const request = require('request')
+const constants = require('./config/constants.js')
 const app = express()
+
+// TODO: Verify using page ID.
+var VERIFY_TOKEN = constants.VERIFY_TOKEN
 
 app.set('port', (process.env.PORT || 5000))
 app.use(bodyParser.urlencoded({extended: false}))
@@ -16,7 +20,7 @@ app.get('/', function (req, res) {
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
+    if (req.query['hub.verify_token'] === VERIFY_TOKEN) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
